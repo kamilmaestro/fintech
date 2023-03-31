@@ -1,6 +1,7 @@
 package kamilmarnik.fintech.bank.domain;
 
 import kamilmarnik.fintech.bank.dto.AccountDto;
+import kamilmarnik.fintech.bank.exception.InvalidAccountCreation;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,40 +10,36 @@ import lombok.experimental.FieldDefaults;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+//@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 final class Account {
 
   UUID id;
-  BigDecimal accountBalance;
+  AccountBalance accountBalance;
+
+  public Account(UUID id, AccountBalance accountBalance) {
+    this.id = id;
+    this.accountBalance = accountBalance;
+  }
 
   static Account create(UUID accountId) {
     if (accountId == null) {
-      throw new IllegalStateException("Can not create an account without an ID");
+      throw new InvalidAccountCreation();
     }
-    return new Account(accountId, BigDecimal.ZERO);
+    return new Account(accountId, AccountBalance.emptyForNewAccount());
   }
 
   Account deposit(BigDecimal depositValue) {
-    if (depositValue == null || BigDecimal.ZERO.compareTo(depositValue) >= 0) {
-      throw new IllegalStateException();
-    }
-    return new Account(id, accountBalance.add(depositValue));
+    return new Account(id, accountBalance.deposit(depositValue));
   }
 
   Account withdraw(BigDecimal value) {
-    if (value == null) {
-      throw new IllegalStateException();
-    }
-    if (value.compareTo(accountBalance) > 0) {
-      throw new IllegalStateException();
-    }
-    return new Account(id, accountBalance.subtract(value));
+    return new Account(id, accountBalance.withdraw(value));
   }
 
   AccountDto dto() {
-    return new AccountDto(id, accountBalance);
+    return new AccountDto(id, accountBalance.getValueAsBigDecimal());
   }
 
 }

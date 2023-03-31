@@ -2,14 +2,13 @@ package kamilmarnik.fintech.bank.infrastructure;
 
 import kamilmarnik.fintech.bank.domain.BankFacade;
 import kamilmarnik.fintech.bank.dto.AccountDto;
+import kamilmarnik.fintech.bank.dto.Deposit;
+import kamilmarnik.fintech.bank.dto.Withdrawal;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -30,14 +29,14 @@ class BankController {
     return ResponseEntity.ok(bankFacade.createAccount(accountId));
   }
 
-  @PutMapping("/{accountId}/deposit")
-  ResponseEntity<AccountDto> depositMoneyToAccount(@PathVariable UUID accountId) {
-    return ResponseEntity.ok(bankFacade.deposit(accountId, BigDecimal.TEN));
+  @PutMapping("/deposit")
+  ResponseEntity<AccountDto> depositMoneyToAccount(@RequestBody Deposit deposit) {
+    return ResponseEntity.ok(bankFacade.deposit(deposit));
   }
 
-  @PutMapping("/{accountId}/withdraw")
-  ResponseEntity<AccountDto> withdrawMoneyFromAccount(@PathVariable UUID accountId) {
-    return ResponseEntity.ok(bankFacade.withdraw(accountId, BigDecimal.ONE));
+  @PutMapping("/withdraw")
+  ResponseEntity<AccountDto> withdrawMoneyFromAccount(@RequestBody Withdrawal withdrawal) {
+    return ResponseEntity.ok(bankFacade.withdraw(withdrawal));
   }
 
 }

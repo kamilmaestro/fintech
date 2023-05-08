@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-//@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 final class Account {
@@ -18,7 +17,7 @@ final class Account {
   UUID id;
   AccountBalance accountBalance;
 
-  public Account(UUID id, AccountBalance accountBalance) {
+  private Account(UUID id, AccountBalance accountBalance) {
     this.id = id;
     this.accountBalance = accountBalance;
   }

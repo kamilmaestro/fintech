@@ -50,4 +50,15 @@ class WithdrawalSpec extends BankBaseSpec {
       thrown(AccountNotFound)
   }
 
+  def "should not withdraw an improper amount of money" () {
+    given: "there is an account"
+      AccountDto account = bankFacade.createAccount(FIRST_ACCOUNT_ID)
+    and: "this account has balance equal $BigDecimal.TEN"
+      bankFacade.deposit(new Deposit(account.id(), BigDecimal.TEN))
+    when: "withdraws an improper amount of money"
+      bankFacade.withdraw(new Withdrawal(FIRST_ACCOUNT_ID, null))
+    then: "money can not be withdrawn due to invalid value"
+      thrown(InvalidWithdrawal)
+  }
+
 }

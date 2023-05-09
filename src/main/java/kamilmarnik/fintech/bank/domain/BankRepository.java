@@ -9,4 +9,6 @@ interface BankRepository {
 
   Optional<Account> findById(UUID id);
 
+  void deleteById(UUID id);
+
 }

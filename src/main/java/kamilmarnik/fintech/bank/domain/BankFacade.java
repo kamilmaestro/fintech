@@ -45,4 +45,11 @@ public final class BankFacade {
         .orElseThrow(() -> new AccountNotFound(accountId));
   }
 
+  public Withdrawal closeAccount(UUID uuid) {
+    Account account = getAccount(uuid);
+
+    bankRepository.deleteById(account.getId());
+
+    return new Withdrawal(uuid, account.dto().accountBalance());
+  }
 }

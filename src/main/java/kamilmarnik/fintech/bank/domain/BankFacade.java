@@ -52,4 +52,17 @@ public final class BankFacade {
 
     return new Withdrawal(uuid, account.dto().accountBalance());
   }
+
+  public void blockAccount(UUID uuid) {
+
+    Account account = getAccount(uuid);
+
+    bankRepository.save(account.block());
+  }
+
+  public void unblockAccount(UUID uuid) {
+    Account account = getAccount(uuid);
+
+    bankRepository.save(account.unblock());
+  }
 }

@@ -1,6 +1,7 @@
 package kamilmarnik.fintech.bank.domain;
 
 import kamilmarnik.fintech.bank.dto.AccountDto;
+import kamilmarnik.fintech.bank.dto.Withdrawal;
 import kamilmarnik.fintech.bank.exception.InvalidAccountCreation;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Getter

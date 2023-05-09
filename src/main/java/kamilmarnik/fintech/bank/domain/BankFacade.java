@@ -1,8 +1,6 @@
 package kamilmarnik.fintech.bank.domain;
 
-import kamilmarnik.fintech.bank.dto.AccountDto;
-import kamilmarnik.fintech.bank.dto.Deposit;
-import kamilmarnik.fintech.bank.dto.Withdrawal;
+import kamilmarnik.fintech.bank.dto.*;
 import kamilmarnik.fintech.bank.exception.AccountNotFound;
 import kamilmarnik.fintech.bank.exception.InvalidAccountCreation;
 import lombok.AccessLevel;
@@ -37,10 +35,11 @@ public final class BankFacade {
         .dto();
   }
 
-  public AccountDto withdraw(Withdrawal withdrawal) {
+  public WithdrawalHistory withdraw(Withdrawal withdrawal) {
     final Account account = getAccount(withdrawal.accountId());
-    return bankRepository.save(account.withdraw(withdrawal.value()))
-        .dto();
+    bankRepository.save(account.withdraw(withdrawal.value()))
+            .dto();
+    return new WithdrawalHistory(withdrawal.accountId(), withdrawal.value(), withdrawal.typeOfWithdraw());
   }
 
   private Account getAccount(UUID accountId) {
@@ -48,4 +47,7 @@ public final class BankFacade {
         .orElseThrow(() -> new AccountNotFound(accountId));
   }
 
+  public Balance getBalance(UUID accountId) {
+    return new Balance(getAccount(accountId).getAccountBalance().getValueAsBigDecimal());
+  }
 }

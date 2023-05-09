@@ -2,7 +2,9 @@ package kamilmarnik.fintech.bank.domain
 
 import kamilmarnik.fintech.bank.dto.AccountDto
 import kamilmarnik.fintech.bank.dto.Deposit
+import kamilmarnik.fintech.bank.dto.TypeOfWithdraw
 import kamilmarnik.fintech.bank.dto.Withdrawal
+import kamilmarnik.fintech.bank.dto.WithdrawalHistory
 import kamilmarnik.fintech.bank.exception.AccountNotFound
 import kamilmarnik.fintech.bank.exception.InvalidWithdrawal
 import spock.lang.Unroll
@@ -16,7 +18,7 @@ class WithdrawalSpec extends BankBaseSpec {
     and: "this account has balance equal $startingBalance"
       bankFacade.deposit(new Deposit(account.id(), startingBalance))
     when: "withdraws amount of money: $withrawnValue from this account"
-      AccountDto afterWithdrawal = bankFacade.withdraw(new Withdrawal(account.id(), withrawnValue))
+      WithdrawalHistory afterWithdrawal = bankFacade.withdraw(new Withdrawal(account.id(), withrawnValue))
     then: "account balance is changed to: $calculatedBalance"
       afterWithdrawal.accountBalance() == calculatedBalance
     where:
@@ -50,4 +52,14 @@ class WithdrawalSpec extends BankBaseSpec {
       thrown(AccountNotFound)
   }
 
+  def "Should save a type of withdraw" () {
+    given: "there is an account"
+      AccountDto account = bankFacade.createAccount(FIRST_ACCOUNT_ID)
+    and: "user deposit 2 pln"
+      bankFacade.deposit(new Deposit(account.id(), BigDecimal.TWO))
+    when: "withdraws amount of money: 1 pln from this account for a reason food"
+    WithdrawalHistory withdrawalHistory = bankFacade.withdraw(new Withdrawal(account.id(), BigDecimal.TWO, TypeOfWithdraw.food))
+    then: "account balance is changed to: 1 pln for reason food"
+      withdrawalHistory.typeOfWithdraw() == TypeOfWithdraw.food
+  }
 }

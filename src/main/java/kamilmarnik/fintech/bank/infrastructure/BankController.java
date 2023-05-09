@@ -4,6 +4,7 @@ import kamilmarnik.fintech.bank.domain.BankFacade;
 import kamilmarnik.fintech.bank.dto.AccountDto;
 import kamilmarnik.fintech.bank.dto.Deposit;
 import kamilmarnik.fintech.bank.dto.Withdrawal;
+import kamilmarnik.fintech.bank.dto.WithdrawalHistory;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ class BankController {
   }
 
   @PutMapping("/withdraw")
-  ResponseEntity<AccountDto> withdrawMoneyFromAccount(@RequestBody Withdrawal withdrawal) {
+  ResponseEntity<WithdrawalHistory> withdrawMoneyFromAccount(@RequestBody Withdrawal withdrawal) {
     return ResponseEntity.ok(bankFacade.withdraw(withdrawal));
   }
 

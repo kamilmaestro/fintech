@@ -23,9 +23,6 @@ final class Account {
   }
 
   static Account create(UUID accountId) {
-    if (accountId == null) {
-      throw new InvalidAccountCreation();
-    }
     return new Account(accountId, AccountBalance.emptyForNewAccount());
   }
 

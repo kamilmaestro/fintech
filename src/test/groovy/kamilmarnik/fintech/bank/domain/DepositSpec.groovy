@@ -11,8 +11,11 @@ class DepositSpec extends BankBaseSpec {
   @Unroll
   def "should deposit money to an account" () {
     given: "there is an account"
+      AccountDto account = bankFacade.createAccount(FIRST_ACCOUNT_ID)
     when: "deposits sum of money: $value to an account"
+      AccountDto depositedAccount = bankFacade.deposit(new Deposit(account.id(), value))
     then: "account has balance equal: $value"
+      depositedAccount.accountBalance() == value
     where:
       value << [BigDecimal.TEN, new BigDecimal("1.45")]
   }

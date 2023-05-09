@@ -1,8 +1,6 @@
 package kamilmarnik.fintech.bank.domain;
 
-import kamilmarnik.fintech.bank.dto.AccountDto;
-import kamilmarnik.fintech.bank.dto.Deposit;
-import kamilmarnik.fintech.bank.dto.Withdrawal;
+import kamilmarnik.fintech.bank.dto.*;
 import kamilmarnik.fintech.bank.exception.AccountNotFound;
 import kamilmarnik.fintech.bank.exception.InvalidAccountCreation;
 import lombok.AccessLevel;
@@ -45,4 +43,19 @@ public final class BankFacade {
         .orElseThrow(() -> new AccountNotFound(accountId));
   }
 
+  public TerminateAccount terminateAccount(UUID accountId) {
+    BigDecimal balance = this.getAccount(accountId).getAccountBalance().getValueAsBigDecimal();
+    bankRepository.deleteAccount(accountId);
+    return new TerminateAccount(balance);
+  }
+
+  public Transfer transferMoney(UUID fromAccountId, UUID toAccountId, BigDecimal money) {
+    final Account fromAccount = getAccount(fromAccountId);
+    final Account toAccount = getAccount(toAccountId);
+    Account withdraw = fromAccount.withdraw(money);
+    Account deposit = toAccount.deposit(money);
+    bankRepository.save(withdraw);
+    bankRepository.save(deposit);
+    return new Transfer(fromAccountId, toAccountId, money);
+  }
 }

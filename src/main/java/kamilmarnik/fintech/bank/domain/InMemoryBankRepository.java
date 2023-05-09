@@ -19,4 +19,9 @@ final class InMemoryBankRepository implements BankRepository {
     return Optional.ofNullable(accounts.get(id));
   }
 
+  @Override
+  public void deleteAccount(UUID accountId) {
+    accounts.remove(accountId);
+  }
+
 }

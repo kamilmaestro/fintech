@@ -23,6 +23,9 @@ public final class BankFacade {
   public AccountDto createAccount(UUID accountId) {
     bankRepository.findById(accountId)
         .ifPresent(account -> { throw new InvalidAccountCreation(); });
+    if(accountId == null) {
+      throw new InvalidAccountCreation();
+    }
     final Account account = Account.create(accountId);
     return bankRepository.save(account)
         .dto();

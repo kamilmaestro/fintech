@@ -8,5 +8,5 @@ import java.util.UUID;
  */
 
 
-public record AccountDto(UUID id, BigDecimal accountBalance) {
+public record AccountDto(UUID id, BigDecimal accountBalance, CurrencyDto currency) {
 }

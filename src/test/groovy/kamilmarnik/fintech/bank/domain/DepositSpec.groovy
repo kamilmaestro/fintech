@@ -1,8 +1,10 @@
 package kamilmarnik.fintech.bank.domain
 
 import kamilmarnik.fintech.bank.dto.AccountDto
+import kamilmarnik.fintech.bank.dto.CurrencyDto
 import kamilmarnik.fintech.bank.dto.Deposit
 import kamilmarnik.fintech.bank.exception.AccountNotFound
+import kamilmarnik.fintech.bank.exception.InvalidCurrency
 import kamilmarnik.fintech.bank.exception.InvalidDeposit
 import spock.lang.Unroll
 
@@ -12,13 +14,17 @@ import spock.lang.Unroll
 
 
 class DepositSpec extends BankBaseSpec {
+  AccountDto account;
+
+  def setup(){
+    given: "there is an account"
+      account = bankFacade.createAccount(FIRST_ACCOUNT_ID, CurrencyDto.PLN)
+  }
 
   @Unroll
   def "should deposit money to an account" () {
-    given: "there is an account"
-      AccountDto account = bankFacade.createAccount(FIRST_ACCOUNT_ID)
     when: "deposits sum of money: $value to an account"
-      AccountDto depositedAccount = bankFacade.deposit(new Deposit(account.id(), value))
+      AccountDto depositedAccount = bankFacade.deposit(new Deposit(account.id(), value, CurrencyDto.PLN))
     then: "account has balance equal: $value"
       depositedAccount.accountBalance() == value
     where:
@@ -27,12 +33,10 @@ class DepositSpec extends BankBaseSpec {
 
   @Unroll
   def "should deposit money to an already deposited account" () {
-    given: "there is an account"
-      AccountDto account = bankFacade.createAccount(FIRST_ACCOUNT_ID)
-    and: "this account has balance equal $startingBalance"
-      bankFacade.deposit(new Deposit(account.id(), startingBalance))
+    given: "this account has balance equal $startingBalance"
+      bankFacade.deposit(new Deposit(account.id(), startingBalance, CurrencyDto.PLN))
     when: "deposits money: $depositedValue to an account once more"
-      AccountDto depositedAccount = bankFacade.deposit(new Deposit(account.id(), depositedValue))
+      AccountDto depositedAccount = bankFacade.deposit(new Deposit(account.id(), depositedValue, CurrencyDto.PLN))
     then: "account contains sum of money equal: $calculatedBalance"
       depositedAccount.accountBalance() == calculatedBalance
     where:
@@ -44,21 +48,46 @@ class DepositSpec extends BankBaseSpec {
 
   def "should not deposit money to a non-existing account" () {
     when: "deposits money to an account"
-      bankFacade.deposit(new Deposit(FIRST_ACCOUNT_ID, BigDecimal.TEN))
+      bankFacade.deposit(new Deposit(SECOND_ACCOUNT_ID, BigDecimal.TEN, CurrencyDto.PLN))
     then: "account does not exist"
       thrown(AccountNotFound)
   }
 
   @Unroll
   def "should not deposit money with an improper value" () {
-    given: "there is an account"
-      AccountDto account = bankFacade.createAccount(FIRST_ACCOUNT_ID)
     when: "deposits sum of money: $improperValue to an account"
-     bankFacade.deposit(new Deposit(account.id(), improperValue))
+     bankFacade.deposit(new Deposit(account.id(), improperValue, CurrencyDto.PLN))
     then: "account can not be deposited with the sum of money equal: $improperValue"
       thrown(InvalidDeposit)
     where:
       improperValue << [null, BigDecimal.ZERO, new BigDecimal("-5")]
+  }
+
+//  def "should not deposit money with different currency"(){
+//    when: "deposits sum of 1 EUR to an account"
+//      bankFacade.deposit(new Deposit(account.id(), BigDecimal.ONE, CurrencyDto.EUR))
+//    then: "account can not be deposited with the sum of money in different currency:"
+//      thrown(InvalidDeposit)
+//  }
+
+  @Unroll
+  def "should deposit money with different currency" () {
+    when: "deposits sum of money: $value to an account in: $currency"
+      bankFacade.deposit(new Deposit(account.id(), value, currency))
+    then: "account has balance equal: $valueInDifferentCurrency"
+      account.accountBalance() == valueInDifferentCurrency;
+    where:
+      currency        |     value               ||  valueInDifferentCurrency
+      CurrencyDto.EUR |  new BigDecimal("100")  ||  new BigDecimal("450")
+      CurrencyDto.USD |  new BigDecimal("100")  ||  new BigDecimal("400")
+  }
+
+
+  def "should not deposit money without currency"(){
+    when: "deposits sum of 1 EUR to an account"
+      bankFacade.deposit(new Deposit(account.id(), BigDecimal.ONE, null))
+    then: "account can not be deposited with the sum of money in different currency:"
+      thrown(InvalidCurrency)
   }
 
 }

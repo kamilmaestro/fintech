@@ -2,6 +2,7 @@ package kamilmarnik.fintech.bank.infrastructure;
 
 import kamilmarnik.fintech.bank.domain.BankFacade;
 import kamilmarnik.fintech.bank.dto.AccountDto;
+import kamilmarnik.fintech.bank.dto.CurrencyDto;
 import kamilmarnik.fintech.bank.dto.Deposit;
 import kamilmarnik.fintech.bank.dto.Withdrawal;
 import lombok.AccessLevel;
@@ -22,26 +23,26 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 class BankController {
 
-  BankFacade bankFacade;
+    BankFacade bankFacade;
 
-  @Autowired
-  BankController(BankFacade bankFacade) {
-    this.bankFacade = bankFacade;
-  }
+    @Autowired
+    BankController(BankFacade bankFacade) {
+        this.bankFacade = bankFacade;
+    }
 
-  @PostMapping("/{accountId}")
-  ResponseEntity<AccountDto> createAccount(@PathVariable UUID accountId) {
-    return ResponseEntity.ok(bankFacade.createAccount(accountId));
-  }
+    @PostMapping("/{accountId}")
+    ResponseEntity<AccountDto> createAccount(@PathVariable UUID accountId, @PathVariable CurrencyDto currencyDto) {
+        return ResponseEntity.ok(bankFacade.createAccount(accountId, currencyDto));
+    }
 
-  @PutMapping("/deposit")
-  ResponseEntity<AccountDto> depositMoneyToAccount(@RequestBody Deposit deposit) {
-    return ResponseEntity.ok(bankFacade.deposit(deposit));
-  }
+    @PutMapping("/deposit")
+    ResponseEntity<AccountDto> depositMoneyToAccount(@RequestBody Deposit deposit) {
+        return ResponseEntity.ok(bankFacade.deposit(deposit));
+    }
 
-  @PutMapping("/withdraw")
-  ResponseEntity<AccountDto> withdrawMoneyFromAccount(@RequestBody Withdrawal withdrawal) {
-    return ResponseEntity.ok(bankFacade.withdraw(withdrawal));
-  }
+    @PutMapping("/withdraw")
+    ResponseEntity<AccountDto> withdrawMoneyFromAccount(@RequestBody Withdrawal withdrawal) {
+        return ResponseEntity.ok(bankFacade.withdraw(withdrawal));
+    }
 
 }

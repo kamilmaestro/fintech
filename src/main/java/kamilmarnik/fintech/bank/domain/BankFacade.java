@@ -1,10 +1,12 @@
 package kamilmarnik.fintech.bank.domain;
 
 import kamilmarnik.fintech.bank.dto.AccountDto;
+import kamilmarnik.fintech.bank.dto.CurrencyDto;
 import kamilmarnik.fintech.bank.dto.Deposit;
 import kamilmarnik.fintech.bank.dto.Withdrawal;
 import kamilmarnik.fintech.bank.exception.AccountNotFound;
 import kamilmarnik.fintech.bank.exception.InvalidAccountCreation;
+import kamilmarnik.fintech.bank.exception.InvalidDeposit;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,17 +27,17 @@ public final class BankFacade {
 
   BankRepository bankRepository;
 
-  public AccountDto createAccount(UUID accountId) {
+  public AccountDto createAccount(UUID accountId, CurrencyDto currencyDto) {
     bankRepository.findById(accountId)
         .ifPresent(account -> { throw new InvalidAccountCreation(); });
-    final Account account = Account.create(accountId);
+    final Account account = Account.create(accountId,currencyDto);
     return bankRepository.save(account)
         .dto();
   }
 
   public AccountDto deposit(Deposit deposit) {
     final Account account = getAccount(deposit.accountId());
-    return bankRepository.save(account.deposit(deposit.value()))
+    return bankRepository.save(account.deposit(deposit.value(),Currency.fromDto(deposit.currency())))
         .dto();
   }
 

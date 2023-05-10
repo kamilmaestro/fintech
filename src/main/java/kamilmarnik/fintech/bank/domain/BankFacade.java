@@ -2,6 +2,7 @@ package kamilmarnik.fintech.bank.domain;
 
 import kamilmarnik.fintech.bank.dto.AccountDto;
 import kamilmarnik.fintech.bank.dto.Deposit;
+import kamilmarnik.fintech.bank.dto.DepositResult;
 import kamilmarnik.fintech.bank.dto.Withdrawal;
 import kamilmarnik.fintech.bank.exception.AccountNotFound;
 import kamilmarnik.fintech.bank.exception.InvalidAccountCreation;
@@ -28,10 +29,14 @@ public final class BankFacade {
         .dto();
   }
 
-  public AccountDto deposit(Deposit deposit) {
+  public DepositResult deposit(Deposit deposit) {
+
     final Account account = getAccount(deposit.accountId());
-    return bankRepository.save(account.deposit(deposit.value()))
-        .dto();
+     Account depositedAccount = bankRepository.save(account.deposit(deposit.value()));
+     return     new DepositResult(depositedAccount.getBalance().getValueAsBigDecimal(), deposit.type(), deposit.value());
+
+
+
   }
 
   public AccountDto withdraw(Withdrawal withdrawal) {
@@ -45,4 +50,7 @@ public final class BankFacade {
         .orElseThrow(() -> new AccountNotFound(accountId));
   }
 
+  public boolean deleteAccount(UUID uuid) {
+    return bankRepository.delete(getAccount(uuid));
+  }
 }

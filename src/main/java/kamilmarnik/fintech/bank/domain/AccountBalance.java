@@ -25,7 +25,7 @@ final class AccountBalance implements Comparable<AccountBalance> {
   }
 
   BigDecimal getValueAsBigDecimal() {
-    return balance.setScale(1, RoundingMode.FLOOR);
+    return balance.setScale(2, RoundingMode.FLOOR);
   }
 
   AccountBalance withdraw(BigDecimal toWithdraw) {

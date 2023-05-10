@@ -2,6 +2,7 @@ package kamilmarnik.fintech.bank.domain
 
 import kamilmarnik.fintech.bank.dto.AccountDto
 import kamilmarnik.fintech.bank.dto.Deposit
+import kamilmarnik.fintech.bank.dto.DepositResult
 import kamilmarnik.fintech.bank.exception.AccountNotFound
 import kamilmarnik.fintech.bank.exception.InvalidDeposit
 import spock.lang.Unroll
@@ -13,9 +14,13 @@ class DepositSpec extends BankBaseSpec {
     given: "there is an account"
       AccountDto account = bankFacade.createAccount(FIRST_ACCOUNT_ID)
     when: "deposits sum of money: $value to an account"
-      AccountDto depositedAccount = bankFacade.deposit(new Deposit(account.id(), value))
+    DepositResult depositedAccount = bankFacade.deposit(new Deposit(account.id(), value, "wyplata"))
     then: "account has balance equal: $value"
       depositedAccount.accountBalance() == value
+    and: "deposited money equal: $value"
+      depositedAccount.deposited() == value
+    and: "deposit type equals: 'wyplata'"
+      depositedAccount.type() == 'wyplata'
     where:
       value << [BigDecimal.TEN, new BigDecimal("1.45")]
   }
@@ -27,7 +32,7 @@ class DepositSpec extends BankBaseSpec {
     and: "this account has balance equal $startingBalance"
       bankFacade.deposit(new Deposit(account.id(), startingBalance))
     when: "deposits money: $depositedValue to an account once more"
-      AccountDto depositedAccount = bankFacade.deposit(new Deposit(account.id(), depositedValue))
+      DepositResult depositedAccount = bankFacade.deposit(new Deposit(account.id(), depositedValue))
     then: "account contains sum of money equal: $calculatedBalance"
       depositedAccount.accountBalance() == calculatedBalance
     where:

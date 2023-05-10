@@ -9,4 +9,6 @@ interface BankRepository {
 
   Account save(Account account);
 
+  boolean delete(Account account);
+
 }

@@ -15,6 +15,11 @@ final class InMemoryBankRepository implements BankRepository {
   }
 
   @Override
+  public boolean delete(Account account) {
+    return bank.remove(account.getId(), account);
+  }
+
+  @Override
   public Optional<Account> findById(UUID id) {
     return Optional.ofNullable(bank.get(id));
   }

@@ -3,6 +3,7 @@ package kamilmarnik.fintech.bank.infrastructure;
 import kamilmarnik.fintech.bank.domain.BankFacade;
 import kamilmarnik.fintech.bank.dto.AccountDto;
 import kamilmarnik.fintech.bank.dto.Deposit;
+import kamilmarnik.fintech.bank.dto.DepositResult;
 import kamilmarnik.fintech.bank.dto.Withdrawal;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -30,7 +31,7 @@ class BankController {
   }
 
   @PutMapping("/deposit")
-  ResponseEntity<AccountDto> depositMoneyToAccount(@RequestBody Deposit deposit) {
+  ResponseEntity<DepositResult> depositMoneyToAccount(@RequestBody Deposit deposit) {
     return ResponseEntity.ok(bankFacade.deposit(deposit));
   }
 

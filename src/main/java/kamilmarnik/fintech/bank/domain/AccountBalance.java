@@ -31,7 +31,7 @@ final class AccountBalance implements Comparable<AccountBalance> {
   }
 
   AccountBalance withdraw(BigDecimal toWithdraw) {
-    if (toWithdraw == null || toWithdraw.compareTo(this.value) > 0) {
+    if (toWithdraw == null || toWithdraw.compareTo(BigDecimal.ZERO) < 0 || toWithdraw.compareTo(this.value) > 0 ) {
       throw new InvalidWithdrawal();
     }
     return new AccountBalance(this.value.subtract(toWithdraw));

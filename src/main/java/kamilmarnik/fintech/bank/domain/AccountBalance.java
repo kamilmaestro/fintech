@@ -9,6 +9,10 @@ import lombok.experimental.FieldDefaults;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * Maksymilian Ulanecki
+ */
+
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 final class AccountBalance implements Comparable<AccountBalance> {

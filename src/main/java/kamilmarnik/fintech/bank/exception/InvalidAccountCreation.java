@@ -1,5 +1,10 @@
 package kamilmarnik.fintech.bank.exception;
 
+/**
+ * Maksymilian Ulanecki
+ */
+
+
 public class InvalidAccountCreation extends RuntimeException {
 
   public InvalidAccountCreation() {

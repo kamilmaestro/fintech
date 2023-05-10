@@ -6,6 +6,11 @@ import kamilmarnik.fintech.bank.exception.AccountNotFound
 import kamilmarnik.fintech.bank.exception.InvalidDeposit
 import spock.lang.Unroll
 
+/**
+ * Maksymilian Ulanecki
+ */
+
+
 class DepositSpec extends BankBaseSpec {
 
   @Unroll

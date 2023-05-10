@@ -14,6 +14,11 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Maksymilian Ulanecki
+ */
+
+
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public final class BankFacade {

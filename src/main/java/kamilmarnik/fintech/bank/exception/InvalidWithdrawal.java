@@ -1,5 +1,10 @@
 package kamilmarnik.fintech.bank.exception;
 
+/**
+ * Maksymilian Ulanecki
+ */
+
+
 public class InvalidWithdrawal extends RuntimeException {
 
   public InvalidWithdrawal() {

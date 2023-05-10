@@ -4,6 +4,11 @@ import kamilmarnik.fintech.bank.dto.AccountDto
 import kamilmarnik.fintech.bank.exception.InvalidAccountCreation
 import spock.lang.Unroll
 
+/**
+ * Maksymilian Ulanecki
+ */
+
+
 class AccountCreationSpec extends BankBaseSpec {
 
   @Unroll

@@ -2,6 +2,11 @@ package kamilmarnik.fintech.bank.exception;
 
 import java.util.UUID;
 
+/**
+ * Maksymilian Ulanecki
+ */
+
+
 public class AccountNotFound extends RuntimeException {
 
   public AccountNotFound(UUID accountId) {

@@ -4,6 +4,11 @@ import groovy.transform.CompileStatic
 import kamilmarnik.fintech.bank.dto.AccountDto
 import kamilmarnik.fintech.bank.dto.Deposit
 
+/**
+ * Maksymilian Ulanecki
+ */
+
+
 @CompileStatic
 trait AccountSample {
 

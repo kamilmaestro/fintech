@@ -1,5 +1,6 @@
 package kamilmarnik.fintech.bank.domain;
 
+import kamilmarnik.fintech.bank.InstantProvider;
 import kamilmarnik.fintech.bank.dto.AccountDto;
 import kamilmarnik.fintech.bank.dto.Deposit;
 import kamilmarnik.fintech.bank.dto.Withdrawal;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -19,20 +21,20 @@ import java.util.stream.Collectors;
 public final class BankFacade {
 
     BankRepository bankRepository;
-
+    InstantProvider instantProvider;
     public AccountDto createAccount(UUID accountId) {
         bankRepository.findById(accountId)
                 .ifPresent(account -> {
                     throw new InvalidAccountCreation();
                 });
-        final Account account = Account.create(accountId);
+        final Account account = Account.create(accountId,instantProvider.now());
         return bankRepository.save(account)
                 .dto();
     }
 
     public AccountDto withdraw(Withdrawal withdrawal) {
         final Account account = getAccount(withdrawal.accountId());
-        return bankRepository.save(account.withdraw(withdrawal.value())).dto();
+        return bankRepository.save(account.withdraw(withdrawal.value(),instantProvider.now())).dto();
     }
 
     public AccountDto deposit(Deposit deposit) {

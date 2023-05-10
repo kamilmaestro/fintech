@@ -1,9 +1,12 @@
 package kamilmarnik.fintech.bank.domain
 
+import kamilmarnik.fintech.bank.InstantProvider
 import spock.lang.Specification
 
-class BankBaseSpec extends Specification implements AccountSample {
+import java.time.Clock
 
-  BankFacade bankFacade = new BankConfiguration().bankFacade()
+class BankBaseSpec extends Specification implements AccountSample {
+  InstantProvider instantProvider= new InstantProvider()
+  BankFacade bankFacade = new BankConfiguration().bankFacade(instantProvider)
 
 }

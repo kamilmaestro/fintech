@@ -2,18 +2,25 @@ package kamilmarnik.fintech.bank.domain;
 
 import kamilmarnik.fintech.bank.exception.InvalidDeposit;
 import kamilmarnik.fintech.bank.exception.InvalidWithdrawal;
+import kamilmarnik.fintech.bank.exception.WithdrawalLimitExceeded;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 final class AccountBalance implements Comparable<AccountBalance> {
 
   BigDecimal value;
+
+
+
+
+
 
   static AccountBalance emptyForNewAccount() {
     return new AccountBalance(BigDecimal.ZERO);

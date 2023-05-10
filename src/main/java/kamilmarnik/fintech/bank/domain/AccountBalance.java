@@ -13,33 +13,33 @@ import java.math.RoundingMode;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 final class AccountBalance implements Comparable<AccountBalance> {
 
-  BigDecimal value;
+  BigDecimal balance;
 
   static AccountBalance emptyForNewAccount() {
     return new AccountBalance(BigDecimal.ZERO);
+  }
+
+  @Override
+  public int compareTo(AccountBalance balance) {
+    return getValueAsBigDecimal().compareTo(balance.getValueAsBigDecimal());
+  }
+
+  BigDecimal getValueAsBigDecimal() {
+    return balance.setScale(1, RoundingMode.FLOOR);
+  }
+
+  AccountBalance withdraw(BigDecimal toWithdraw) {
+    if (toWithdraw == null || toWithdraw.compareTo(this.balance) > 0) {
+      throw new InvalidWithdrawal();
+    }
+    return new AccountBalance(this.balance.subtract(toWithdraw));
   }
 
   AccountBalance deposit(BigDecimal toDeposit) {
     if (toDeposit == null || BigDecimal.ZERO.compareTo(toDeposit) >= 0) {
       throw new InvalidDeposit();
     }
-    return new AccountBalance(this.value.add(toDeposit));
-  }
-
-  AccountBalance withdraw(BigDecimal toWithdraw) {
-    if (toWithdraw == null || toWithdraw.compareTo(this.value) > 0) {
-      throw new InvalidWithdrawal();
-    }
-    return new AccountBalance(this.value.subtract(toWithdraw));
-  }
-
-  BigDecimal getValueAsBigDecimal() {
-    return value.setScale(2, RoundingMode.HALF_EVEN);
-  }
-
-  @Override
-  public int compareTo(AccountBalance balance) {
-    return getValueAsBigDecimal().compareTo(balance.getValueAsBigDecimal());
+    return new AccountBalance(this.balance.add(toDeposit));
   }
 
 }

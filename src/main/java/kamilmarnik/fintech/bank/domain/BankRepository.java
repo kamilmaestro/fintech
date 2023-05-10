@@ -5,8 +5,8 @@ import java.util.UUID;
 
 interface BankRepository {
 
-  Account save(Account account);
-
   Optional<Account> findById(UUID id);
+
+  Account save(Account account);
 
 }

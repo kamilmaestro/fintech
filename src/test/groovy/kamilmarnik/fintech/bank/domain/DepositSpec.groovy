@@ -33,8 +33,8 @@ class DepositSpec extends BankBaseSpec {
     where:
       startingBalance       | depositedValue          ||  calculatedBalance
       BigDecimal.TEN        | BigDecimal.ONE          ||  new BigDecimal("11")
-      BigDecimal.ONE        | new BigDecimal("3.21")  ||  new BigDecimal("4.21")
-      new BigDecimal("38")  | new BigDecimal("17")    ||  new BigDecimal("55")
+      BigDecimal.ONE        | new BigDecimal("3.279")  ||  new BigDecimal("4.27")
+      new BigDecimal("38")  | new BigDecimal("18")    ||  new BigDecimal("56")
   }
 
   def "should not deposit money to a non-existing account" () {

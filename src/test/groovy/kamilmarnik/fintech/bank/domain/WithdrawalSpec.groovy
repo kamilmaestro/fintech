@@ -26,23 +26,6 @@ class WithdrawalSpec extends BankBaseSpec {
       new BigDecimal("53")    | new BigDecimal("21.10") ||  new BigDecimal("31.90")
   }
 
-  @Unroll
-  def "should not withdraw money from an account when exceeding the current balance" () {
-    given: "there is an account"
-      AccountDto account = bankFacade.createAccount(FIRST_ACCOUNT_ID)
-    and: "this account has balance equal $startingBalance"
-      bankFacade.deposit(new Deposit(account.id(), startingBalance))
-    when: "withdraws amount of money: $withrawnValue from this account"
-      bankFacade.withdraw(new Withdrawal(account.id(), withrawnValue))
-    then: "money can not be withdrawn from the account"
-      thrown(InvalidWithdrawal)
-    where:
-      startingBalance       | withrawnValue
-      BigDecimal.TEN        | new BigDecimal("21")
-      new BigDecimal("3")   | new BigDecimal("3.5")
-      new BigDecimal("53")  | new BigDecimal("54")
-  }
-
   def "should not withdraw money from a non-existing account" () {
     when: "withdraws money from a non-existing account"
       bankFacade.withdraw(new Withdrawal(FIRST_ACCOUNT_ID, BigDecimal.TEN))
@@ -59,6 +42,23 @@ class WithdrawalSpec extends BankBaseSpec {
       bankFacade.withdraw(new Withdrawal(FIRST_ACCOUNT_ID, null))
     then: "money can not be withdrawn due to invalid value"
       thrown(InvalidWithdrawal)
+  }
+
+  @Unroll
+  def "should not withdraw money from an account when exceeding the current balance" () {
+    given: "there is an account"
+      AccountDto account = bankFacade.createAccount(FIRST_ACCOUNT_ID)
+    and: "this account has balance equal $startingBalance"
+      bankFacade.deposit(new Deposit(account.id(), startingBalance))
+    when: "withdraws amount of money: $withrawnValue from this account"
+      bankFacade.withdraw(new Withdrawal(account.id(), withrawnValue))
+    then: "money can not be withdrawn from the account"
+      thrown(InvalidWithdrawal)
+    where:
+      startingBalance       | withrawnValue
+      BigDecimal.TEN        | new BigDecimal("21")
+      new BigDecimal("3")   | new BigDecimal("3.5")
+      new BigDecimal("53")  | new BigDecimal("54")
   }
 
 }

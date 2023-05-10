@@ -29,16 +29,16 @@ final class Account {
     return new Account(accountId, AccountBalance.emptyForNewAccount());
   }
 
-  Account deposit(BigDecimal depositValue) {
-    return new Account(id, accountBalance.deposit(depositValue));
+  AccountDto dto() {
+    return new AccountDto(id, accountBalance.getValueAsBigDecimal());
   }
 
   Account withdraw(BigDecimal value) {
     return new Account(id, accountBalance.withdraw(value));
   }
 
-  AccountDto dto() {
-    return new AccountDto(id, accountBalance.getValueAsBigDecimal());
+  Account deposit(BigDecimal depositValue) {
+    return new Account(id, accountBalance.deposit(depositValue));
   }
 
 }

@@ -37,23 +37,23 @@ class DepositSpec extends BankBaseSpec {
       new BigDecimal("38")  | new BigDecimal("17")    ||  new BigDecimal("55")
   }
 
-  def "should not deposit money to a non-existing account" () {
-    when: "deposits money to an account"
-      bankFacade.deposit(new Deposit(FIRST_ACCOUNT_ID, BigDecimal.TEN))
-    then: "account does not exist"
-      thrown(AccountNotFound)
-  }
-
   @Unroll
   def "should not deposit money with an improper value" () {
     given: "there is an account"
       AccountDto account = bankFacade.createAccount(FIRST_ACCOUNT_ID)
     when: "deposits sum of money: $improperValue to an account"
-     bankFacade.deposit(new Deposit(account.id(), improperValue))
+      bankFacade.deposit(new Deposit(account.id(), improperValue))
     then: "account can not be deposited with the sum of money equal: $improperValue"
       thrown(InvalidDeposit)
     where:
       improperValue << [null, BigDecimal.ZERO, new BigDecimal("-5")]
+  }
+
+  def "should not deposit money to a non-existing account" () {
+    when: "deposits money to an account"
+      bankFacade.deposit(new Deposit(FIRST_ACCOUNT_ID, BigDecimal.TEN))
+    then: "account does not exist"
+      thrown(AccountNotFound)
   }
 
 }

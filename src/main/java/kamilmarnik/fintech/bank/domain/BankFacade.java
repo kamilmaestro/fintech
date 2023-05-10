@@ -28,16 +28,16 @@ public final class BankFacade {
         .dto();
   }
 
-  public AccountDto deposit(Deposit deposit) {
-    final Account account = getAccount(deposit.accountId());
-    return bankRepository.save(account.deposit(deposit.value()))
-        .dto();
-  }
-
   public AccountDto withdraw(Withdrawal withdrawal) {
     final Account account = getAccount(withdrawal.accountId());
-    return bankRepository.save(account.withdraw(withdrawal.value()))
-        .dto();
+    bankRepository.save(account.withdraw(withdrawal.value()));
+    return account.dto();
+  }
+
+  public AccountDto deposit(Deposit deposit) {
+    final Account account = getAccount(deposit.accountId());
+    bankRepository.save(account.deposit(deposit.value()));
+    return account.dto();
   }
 
   private Account getAccount(UUID accountId) {

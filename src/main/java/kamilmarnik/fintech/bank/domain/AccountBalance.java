@@ -24,7 +24,7 @@ final class AccountBalance implements Comparable<AccountBalance> {
   }
 
   AccountBalance withdraw(BigDecimal toWithdraw) {
-    if (toWithdraw == null || toWithdraw.compareTo(this.balance) > 0) {
+    if (toWithdraw == null || toWithdraw.compareTo(this.balance) > 0 || BigDecimal.ZERO.compareTo(toWithdraw) >= 0 ) {
       throw new InvalidWithdrawal();
     }
     return new AccountBalance(this.balance.subtract(toWithdraw));

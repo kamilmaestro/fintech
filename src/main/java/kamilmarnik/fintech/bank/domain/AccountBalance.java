@@ -19,6 +19,10 @@ final class AccountBalance implements Comparable<AccountBalance> {
     return new AccountBalance(BigDecimal.ZERO);
   }
 
+  BigDecimal getValueAsBigDecimal() {
+    return value.setScale(2, RoundingMode.HALF_EVEN);
+  }
+
   AccountBalance deposit(BigDecimal toDeposit) {
     if (toDeposit == null || BigDecimal.ZERO.compareTo(toDeposit) >= 0) {
       throw new InvalidDeposit();
@@ -31,10 +35,6 @@ final class AccountBalance implements Comparable<AccountBalance> {
       throw new InvalidWithdrawal();
     }
     return new AccountBalance(this.value.subtract(toWithdraw));
-  }
-
-  BigDecimal getValueAsBigDecimal() {
-    return value.setScale(2, RoundingMode.HALF_EVEN);
   }
 
   @Override

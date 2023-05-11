@@ -19,6 +19,10 @@ final class AccountBalance implements Comparable<AccountBalance> {
     return new AccountBalance(BigDecimal.ZERO);
   }
 
+  static AccountBalance withBalance(BigDecimal value){
+    return new AccountBalance(value);
+  }
+
   BigDecimal getValueAsBigDecimal() {
     return value.setScale(2, RoundingMode.HALF_EVEN);
   }

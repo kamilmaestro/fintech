@@ -20,13 +20,22 @@ public final class BankFacade {
 
   BankRepository bankRepository;
 
-  public AccountDto createAccount(UUID accountId) {
-    bankRepository.findById(accountId)
-        .ifPresent(account -> { throw new InvalidAccountCreation(); });
-    final Account account = Account.create(accountId);
+  private AccountDto saveAccount(Account account) {
+    bankRepository.findById(account.getId())
+        .ifPresent(a -> { throw new InvalidAccountCreation(); });
     return bankRepository.save(account)
-        .dto();
+            .dto();
   }
+  public AccountDto createAccount(UUID accountId) {
+    return saveAccount(Account.create(accountId));
+  }
+  public AccountDto createStockAccount(UUID accountId, BigDecimal balance){
+    return saveAccount(Account.createStockAccount(accountId,balance));
+  }
+  public AccountDto createSavingAccount(UUID accountId){
+    return saveAccount(Account.createSavingAccount(accountId));
+  }
+
 
   public AccountDto deposit(Deposit deposit) {
     final Account account = getAccount(deposit.accountId());

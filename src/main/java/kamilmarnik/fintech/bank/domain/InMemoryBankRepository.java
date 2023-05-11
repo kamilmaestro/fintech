@@ -15,7 +15,7 @@ final class InMemoryBankRepository implements BankRepository {
 
   @Override
   public Account save(Account account) {
-    bank.put(UUID.randomUUID(), account);
+    bank.put(account.getId(), account);
     return account;
   }
 

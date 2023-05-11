@@ -11,16 +11,12 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 final class Account {
 
   UUID id;
   AccountBalance accountBalance;
-
-  private Account(UUID id, AccountBalance accountBalance) {
-    this.id = id;
-    this.accountBalance = accountBalance;
-  }
 
   static Account create(UUID accountId) {
     if (accountId == null) {
@@ -29,16 +25,16 @@ final class Account {
     return new Account(accountId, AccountBalance.emptyForNewAccount());
   }
 
-  Account deposit(BigDecimal depositValue) {
-    return new Account(id, accountBalance.deposit(depositValue));
+  AccountDto dto() {
+    return new AccountDto(id, accountBalance.getValueAsBigDecimal());
   }
 
   Account withdraw(BigDecimal value) {
     return new Account(id, accountBalance.withdraw(value));
   }
 
-  AccountDto dto() {
-    return new AccountDto(id, accountBalance.getValueAsBigDecimal());
+  Account deposit(BigDecimal depositValue) {
+    return new Account(id, accountBalance.deposit(depositValue));
   }
 
 }

@@ -6,17 +6,17 @@ import java.util.UUID;
 
 final class InMemoryBankRepository implements BankRepository {
 
-  HashMap<UUID, Account> accounts = new HashMap<>();
+  HashMap<UUID, Account> bank = new HashMap<>();
 
   @Override
   public Account save(Account account) {
-    accounts.put(account.getId(), account);
+    bank.put(account.getId(), account);
     return account;
   }
 
   @Override
   public Optional<Account> findById(UUID id) {
-    return Optional.ofNullable(accounts.get(id));
+    return Optional.ofNullable(bank.get(id));
   }
 
 }
